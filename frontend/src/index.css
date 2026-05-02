@@ -1,0 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Caladea:wght@400;700&display=swap');
+@import "tailwindcss";
+
+html, body {
+  font-family: 'Caladea', serif;
+}
+
+* {
+  font-family: 'Caladea', serif;
+}
