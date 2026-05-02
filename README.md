@@ -199,6 +199,12 @@ Create a `.env` file:
 DEBUG=True
 SECRET_KEY=your_secret_key
 DATABASE_URL=your_postgres_connection_string
+POSTGRES_DB=neondb
+POSTGRES_USER=neondb_owner
+POSTGRES_PASSWORD=your_password
+POSTGRES_HOST=your_host
+POSTGRES_PORT=5432
+
 ```
 
 ---
@@ -457,7 +463,7 @@ This project is for academic and educational purposes.
 
 ## 👨‍💻 Author
 
-**Your Name**
+**PROMISE CHAMPION**
 Software Developer | AI Enthusiast
 
 ---
