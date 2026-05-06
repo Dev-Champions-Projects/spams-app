@@ -62,6 +62,26 @@ export const AuthProvider = ({ children }) => {
     await fetchUser(data.access);
   };
 
+  //REGISTER
+const register = async (formData) => {
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/register/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(formData),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(JSON.stringify(data));
+  }
+
+  return data;
+};
+
+
   // 🔓 LOGOUT
   const logout = () => {
     localStorage.removeItem("access");
@@ -74,7 +94,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ auth, isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ auth, isAuthenticated, login, logout, register }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,18 +1,75 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import {useState} from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Register = () => {
+  const { register } = useAuth();
+  const navigate = useNavigate();
+
+  const [form, setForm] = useState({
+    first_name: "",
+    last_name: "",
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    role: "",
+  });
+
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    // 🔐 Password check
+    if (form.password !== form.confirmPassword) {
+      setError("Passwords do not match");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      await register({
+        first_name: form.first_name,
+        last_name: form.last_name,
+        username: form.username,
+        email: form.email,
+        password: form.password,
+        role: form.role,
+      });
+
+      navigate("/auth/login");
+    } catch (err) {
+      setError("Registration failed");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <main className="min-h-screen flex items-center justify-center px-4 bg-gray-50 dark:bg-neutral-900 ">
       <div className="w-full max-w-lg mx-auto sm:max-w-4xl">
-  
-  {/* Back to Home */}
-    <div className="mb-4 mt-8">
-      <Link to="/" className="text-sm text-[#014691]  hover:underline font-medium">
-        ← Back to Home
-      </Link>
-    </div>
-        
+        {/* Back to Home */}
+        <div className="mb-4 mt-8">
+          <Link
+            to="/"
+            className="text-sm text-[#014691]  hover:underline font-medium"
+          >
+            ← Back to Home
+          </Link>
+        </div>
+
         {/* Header */}
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold text-gray-800 dark:text-white">
@@ -25,51 +82,97 @@ const Register = () => {
 
         {/* Form Card */}
         <div className="bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-xl shadow-sm p-8">
-          
-          <form className="grid sm:grid-cols-2 gap-6">
-            
+          <form onSubmit={handleSubmit} className="grid sm:grid-cols-2 gap-6">
             {/* First Name */}
             <div>
               <label className="form-label">First Name</label>
-              <input type="text" placeholder="John" required className="form-input" />
+              <input
+                type="text"
+                name="first_name"
+                onChange={handleChange}
+                placeholder="First Name"
+                className="form-input"
+                required
+              />
             </div>
 
             {/* Last Name */}
             <div>
               <label className="form-label">Last Name</label>
-              <input type="text" placeholder="Doe" required className="form-input" />
+              <input
+                type="text"
+                name="last_name"
+                onChange={handleChange}
+                placeholder="Last Name"
+                className="form-input"
+                required
+              />
             </div>
 
             {/* Username */}
             <div>
               <label className="form-label">Username</label>
-              <input type="text" placeholder="john_doe" required className="form-input" />
+              <input
+                type="text"
+                name="username"
+                onChange={handleChange}
+                placeholder="Username"
+                className="form-input"
+                required
+              />
             </div>
 
             {/* Email */}
             <div>
               <label className="form-label">Email</label>
-              <input type="email" placeholder="john@email.com" required className="form-input" />
+              <input
+                type="email"
+                name="email"
+                onChange={handleChange}
+                type="email"
+                placeholder="Email"
+                className="form-input"
+                required
+              />
             </div>
-
-         
 
             {/* Password */}
             <div>
               <label className="form-label">Password</label>
-              <input type="password" placeholder="••••••••" required className="form-input" />
+              <input
+                type="password"
+                placeholder="••••••••"
+                name="password"
+                type="password"
+                onChange={handleChange}
+                className="form-input"
+                required
+              />
             </div>
 
             {/* Confirm Password */}
             <div>
               <label className="form-label">Confirm Password</label>
-              <input type="password" placeholder="••••••••" required className="form-input" />
+              <input
+                type="password"
+                placeholder="••••••••"
+                name="confirmPassword"
+                type="password"
+                onChange={handleChange}
+                className="form-input"
+                required
+              />
             </div>
 
-   {/* Role Dropdown */}
+            {/* Role Dropdown */}
             <div className="sm:col-span-2">
               <label className="form-label">Role</label>
-              <select required className="form-input">
+              <select
+                name="role"
+                onChange={handleChange}
+                required
+                className="form-input"
+              >
                 <option value="">Select role</option>
                 <option value="admin">Admin</option>
                 <option value="teacher">Teacher</option>
@@ -83,19 +186,25 @@ const Register = () => {
               <input type="checkbox" required className="accent-blue-600" />
               <span className="text-sm text-gray-600 dark:text-gray-300">
                 I agree to the{" "}
-                <a href="#" className="text-[#014691]  font-medium hover:underline">
+                <a
+                  href="#"
+                  className="text-[#014691]  font-medium hover:underline"
+                >
                   Terms & Conditions
                 </a>
               </span>
             </div>
-
+            {error && (
+              <div className="text-red-500 text-sm sm:col-span-2">{error}</div>
+            )}
             {/* Button */}
             <div className="sm:col-span-2">
               <button
                 type="submit"
-                className="w-full py-2.5 rounded-md bg-[#014691]  text-white font-semibold hover:bg-blue-700 transition"
+                disabled={loading}
+                className="w-full py-2.5 rounded-md cursor-pointer bg-[#014691]  text-white font-semibold hover:bg-blue-700 transition"
               >
-                Create Account
+                {loading ? "Creating..." : "Create Account"}
               </button>
             </div>
           </form>
@@ -104,9 +213,12 @@ const Register = () => {
         {/* Footer */}
         <div className="mt-6 text-center text-sm text-gray-600 dark:text-gray-300">
           Already have an account?{" "}
-          <a href="/auth/login" className="text-[#014691]  font-medium hover:underline">
+          <Link
+            to="/auth/login"
+            className="text-[#014691]  font-medium hover:underline"
+          >
             Login here
-          </a>
+          </Link>
         </div>
       </div>
 
