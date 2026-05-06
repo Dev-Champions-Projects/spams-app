@@ -1,7 +1,13 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
+import { useAuth } from "../context/AuthContext";
+
 
 const Login = () => {
+const { login } = useAuth();
+const navigate = useNavigate();
+
   const [form, setForm] = useState({
     username: "",
     password: "",
@@ -24,29 +30,10 @@ const Login = () => {
     setError("");
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/auth/token/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.detail || "Login failed");
-      }
-
-      // Save tokens
-      localStorage.setItem("access", data.access);
-      localStorage.setItem("refresh", data.refresh);
-
-      // Redirect (you can customize later)
-      window.location.href = "/dashboard";
-
-    } catch (err) {
-      setError(err.message);
+      await login(form.username, form.password);
+      navigate("/dashboard"); 
+      } catch (err) {
+      setError(err.message || "Login failed");
     } finally {
       setLoading(false);
     }

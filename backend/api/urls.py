@@ -12,9 +12,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 class CustomTokenRefreshView(TokenRefreshView):
     pass
 
-
 urlpatterns = [
-
     
     path('health/', views.HealthCheckView.as_view(), name='health_check'),
 
@@ -30,3 +28,8 @@ urlpatterns = [
     path('performance/', include('performance.urls')),
     path('predictions/', include('prediction.urls')),
 ]
+
+
+
+
+

@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import {useAuth} from '../context/AuthContext';
 import {
   LayoutDashboard,
   Users,
@@ -27,14 +28,21 @@ const SidebarNavItem = ({ to, icon, label }) => (
 );
 
 const Sidebar = () => {
+  const { auth } = useAuth();
+
+  const fullName = auth.user
+    ? `${auth.user.first_name} ${auth.user.last_name}`
+    : "Loading...";
+
+
   return (
     <aside className="w-64 bg-white border-r border-gray-200 flex flex-col h-screen">
       <div className="p-6 flex items-center gap-3">
         <div className="w-8 h-8 bg-[#014691] rounded-lg flex items-center justify-center text-white font-bold">
-          P
+                    {auth.user?.first_name?.charAt(0) || "U"}
         </div>
         <h1 className="font-bold text-lg text-[#014691] leading-tight">
-          Promise Duke
+              {fullName}
           <span className="block text-xs font-medium text-gray-400">
             SPAMS Dashboard
           </span>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import {
   LayoutDashboard,
   Users,
@@ -65,9 +66,21 @@ const ATTENDANCE_DATA = [
 ];
 
 const Dashboard = () => {
+  const { auth } = useAuth();
   const [viewState, setViewState] = useState("initial"); // 'initial', 'loading', 'result'
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [studentData, setStudentData] = useState(null);
+
+  const roleMap = {
+  admin: "Administrator User",
+  teacher: "Teacher User",
+  student: "Student User",
+  parent: "Parent User",
+};
+
+const roleLabel = auth.user?.role
+  ? roleMap[auth.user.role] || "User"
+  : "Loading...";
 
   // Simulate Backend Trigger
   const handleRunPrediction = (e) => {
@@ -84,62 +97,10 @@ const Dashboard = () => {
   return (
     <div className="flex h-screen bg-gray-50 font-['Inter',sans-serif] text-slate-700 mb-32">
       {/* --- Sidebar --- */}
-      {/* Responsive Sidebar */}
-      <aside
-        className="w-64 bg-white border-r border-gray-200 flex flex-col fixed md:static h-full z-40 md:z-auto transition-transform duration-300 md:translate-x-0"
-        style={{ left: 0, top: 0, bottom: 0 }}
-      >
-        <div className="p-6 flex items-center gap-3">
-          <div className="w-8 h-8 bg-[#014691] rounded-lg flex items-center justify-center text-white font-bold">
-            P
-          </div>
-          <h1 className="font-bold text-lg text-[#014691] leading-tight">
-            Promise Duke{" "}
-            <span className="block text-xs font-medium text-gray-400">
-              SPAMS Dashboard
-            </span>
-          </h1>
-        </div>
-        <nav className="flex-1 px-4 space-y-2 mt-4 font-bold">
-          <SidebarNavItem
-            to="/dashboard"
-            icon={<LayoutDashboard size={20} />}
-            label="Dashboard"
-          />
-          <SidebarNavItem
-            to="/students"
-            icon={<Users size={20} />}
-            label="Students"
-          />
-          <SidebarNavItem
-            to="/teachers"
-            icon={<UserRound size={20} />}
-            label="Teachers"
-          />
-          <SidebarNavItem
-            to="/classes"
-            icon={<GraduationCap size={20} />}
-            label="Classes"
-          />
-          <SidebarNavItem
-            to="/reports"
-            icon={<FileText size={20} />}
-            label="Reports"
-          />
-          <SidebarNavItem
-            to="/settings"
-            icon={<Settings size={20} />}
-            label="Settings"
-          />
-          <SidebarNavItem
-            to="/help"
-            icon={<HelpCircle size={20} />}
-            label="Help"
-          />
-        </nav>
-      </aside>
+      {/*  {/* Responsive Sidebar */}
 
-      {/* --- Main Content --- */}
+      <Sidebar />
+     
       <main className="flex-1 overflow-y-auto">
         {/* Header */}
         <header className="h-20 bg-[#014691] border-b border-gray-200 px-8 flex items-center justify-between sticky top-0 z-10">
@@ -164,7 +125,9 @@ const Dashboard = () => {
             </button>
             <div className="flex items-center gap-3 border-l pl-6">
               <div className="text-right">
-                <p className="text-sm text-white font-semibold">Admin User</p>
+                <p className="text-sm text-white font-semibold">
+  {roleLabel}
+</p>
               </div>
               <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
                 <User size={24} className="text-gray-400" />
@@ -461,7 +424,6 @@ const Dashboard = () => {
                     />
                   </div>
                 </div>
-               
 
                 <p className="text-xs text-gray-400 text-center">
                   All scores are entered out of 100. Weighted CA and total will

@@ -13,16 +13,23 @@ import Classes from "./pages/dashboard/Classes";
 import Reports from "./pages/dashboard/Reports";
 import Settings from "./pages/dashboard/Settings";
 import Help from "./pages/dashboard/Help";
+import ProtectedRoute from "./ProtectedRoute";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-
         {/* Main layout */}
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
-          <Route path="dashboard" element={<Dashboard />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
           <Route path="students" element={<Students />} />
           <Route path="teachers" element={<Teachers />} />
           <Route path="classes" element={<Classes />} />
@@ -35,12 +42,11 @@ export default function App() {
         <Route path="/auth" element={<AuthLayout />}>
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
-
         </Route>
 
         {/* App layout */}
 
-         <Route element={<AppLayout />}>
+        <Route element={<AppLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/students" element={<Students />} />
           <Route path="/teachers" element={<Teachers />} />
