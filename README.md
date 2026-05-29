@@ -467,7 +467,7 @@ This project is for academic and educational purposes.
 ## 👨‍💻 Author
 
 <<<<<<< HEAD
-**Your Name**
+**DEV CHAMPIONS ACADEMY**
 =======
 **PROMISE CHAMPION**
 >>>>>>> 4ebabd9642ef05c91d674af54e43a9af22402033
